@@ -33,6 +33,7 @@ open class UIPiPView: UIView,
                 sampleBufferDisplayLayer: pipBufferDisplayLayer,
                 playbackDelegate: self))
             controller.delegate = self
+			controller.setValue(1, forKey: "controlsStyle")
             return controller
         } else {
             return nil

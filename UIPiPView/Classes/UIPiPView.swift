@@ -59,7 +59,10 @@ open class UIPiPView: UIView,
             #available(iOS 15.0, *) else { return }
 
         let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(.playback, mode: .moviePlayback)
+		if session.category == .playback, session.categoryOptions.contains(.mixWithOthers) {
+			return
+		}
+        try! session.setCategory(.playback, options: [.mixWithOthers])
         try! session.setActive(true)
     }
 
@@ -158,6 +161,8 @@ open class UIPiPView: UIView,
         }
     }
 
+	@objc dynamic open var isPictureInPicture: Bool = false
+	
     /// Returns whether PiP is running or not.
     open func isPictureInPictureActive() -> Bool {
         guard let pipController = pipController else { return false }
@@ -212,11 +217,17 @@ open class UIPiPView: UIView,
         _ pictureInPictureController: AVPictureInPictureController
     ) {
     }
+	
+	public func pictureInPictureControllerDidStartPictureInPicture(
+		_ pictureInPictureController: AVPictureInPictureController) {
+		isPictureInPicture = true
+	}
 
     /// Always call the parent when overriding this function.
     open func pictureInPictureControllerWillStopPictureInPicture(
         _ pictureInPictureController: AVPictureInPictureController
     ) {
+		isPictureInPicture = false
         refreshIntervalTimer?.invalidate()
         refreshIntervalTimer = nil
     }

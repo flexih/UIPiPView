@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         self.view.addSubview(startButton)
 
         /// PiP View
-        pipView.frame = .init(x: margin, y: 160, width: width, height: 40)
+		pipView.frame = .init(x: margin, y: -UIScreen.main.bounds.height, width: width, height: 40)
         pipView.backgroundColor = .black
         self.view.addSubview(pipView)
 
